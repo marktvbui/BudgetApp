@@ -37,8 +37,20 @@ var UIController = (function() {
 // Main App Controller
 var controller = (function(budgetCtrl, UICtrl) {
 
-    // setting Dom to access getDomstrings method
-    var Dom = UICtrl.getDomstrings();
+    // setting up
+    var setupEventListeners = function() {
+        // setting Dom to access getDomstrings method
+        var Dom = UICtrl.getDomstrings();
+        // onclick event to happen when a user clicks on the add_btn, calling the crtlAddItem function
+        document.querySelector(Dom.inputBtn).addEventListener('click', ctrlAddItem);
+
+        // global 'return/enter' button press event listener
+        document.addEventListener('keypress', function(event) {
+            if (event.keycode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
+    };
 
     var ctrlAddItem = function() {
 
@@ -50,18 +62,16 @@ var controller = (function(budgetCtrl, UICtrl) {
         // calculate the budget
         // display budget
 
-    }
+    };
 
-    // onclick event to happen when a user clicks on the add_btn, calling the crtlAddItem function
-    document.querySelector(Dom.inputBtn).addEventListener('click', ctrlAddItem);
-
-    // global 'return/enter' button press event listener
-    document.addEventListener('keypress', function(event) {
-
-        if (event.keycode === 13 || event.which === 13) {
-            ctrlAddItem();
+    return {
+        // function that runs when app starts
+        init: function() {
+            setupEventListeners();
         }
-
-    });
+    };
 
 })(budgetController, UIController);
+
+// calling init method from controller
+controller.init();
