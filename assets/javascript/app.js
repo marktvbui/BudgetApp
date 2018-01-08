@@ -7,15 +7,28 @@ var budgetController = (function() {
 // UI Controller
 var UIController = (function() {
 
+    // setting object with all the input class names, in case ui classes gets changed
+    var DOMstrings = {
+        inputType: '.add__type',
+        inputDescription: '.add__description',
+        inputValue: '.add__value',
+        inputBtn: '.add__btn',
+    }
+
     return {
         getinput: function() {
-            // returning an object with all the UI
+            // returning an object with input from the UI
             return {
-                type: document.querySelector('.add__type').value,
-                description: document.querySelector('.add__description').value,
-                value: document.querySelector('.add__value').value,
+                type: document.querySelector(DOMstrings.inputType).value,
+                description: document.querySelector(DOMstrings.inputDescription).value,
+                value: document.querySelector(DOMstrings.inputValue).value,
             }
 
+        }
+
+        // setting public method to allow other controllers to access DOMstrings
+        getDomstrings: function() {
+            return DOMstrings;
         }
     };
 
@@ -23,6 +36,9 @@ var UIController = (function() {
 
 // Main App Controller
 var controller = (function(budgetCtrl, UICtrl) {
+
+    // setting Dom to access getDomstrings method
+    var Dom = UICtrl.getDomstrings();
 
     var ctrlAddItem = function() {
 
@@ -37,7 +53,7 @@ var controller = (function(budgetCtrl, UICtrl) {
     }
 
     // onclick event to happen when a user clicks on the add_btn, calling the crtlAddItem function
-    document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+    document.querySelector(Dom.inputBtn).addEventListener('click', ctrlAddItem);
 
     // global 'return/enter' button press event listener
     document.addEventListener('keypress', function(event) {
