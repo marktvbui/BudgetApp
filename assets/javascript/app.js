@@ -81,8 +81,8 @@ var UIController = (function() {
 
         addListItem: function(obj, type) {
             var html, newHtml, element;
-            // Create HTML string with placeholder text
 
+            // Create HTML string with placeholder text within the if statements
             if (type === 'inc') {
                 element = DOMstrings.incomeContainer;
 
@@ -90,7 +90,7 @@ var UIController = (function() {
             } else if (type === 'exp') {
                 element = DOMstrings.expensesContainer;
 
-                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="exp-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             }
 
             // Replace the placeholder text with some actual data
@@ -102,6 +102,20 @@ var UIController = (function() {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        clearFields: function() {
+            var fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            fieldsArr.forEach(function(current, index, array) {
+                current.value = '';
+            });
+
+            fieldsArr[0].focus();
+
+        },
         // setting public method to allow other controllers to access DOMstrings
         getDomstrings: function() {
             return DOMstrings;
@@ -140,6 +154,9 @@ var controller = (function(budgetCtrl, UICtrl) {
 
         // add the item to the UI interface
         UICtrl.addListItem(newItem, input.type);
+
+        // clear the fields
+        UICtrl.clearFields();
 
         // calculate the budget
         // display budget
