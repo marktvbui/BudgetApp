@@ -15,6 +15,7 @@ var budgetController = (function() {
         this.value = value;
     };
 
+    // function calculating total of either expense or income
     var calculateTotal = function(type) {
         var sum = 0;
         data.allItems[type].forEach(function(cur){
@@ -79,6 +80,7 @@ var budgetController = (function() {
             }
         },
 
+        // setting object to input data
         getBudget: function() {
             return {
                 budget: data.budget,
@@ -110,6 +112,7 @@ var UIController = (function() {
         percentageLabel: '.budget__expenses--percentage',
     };
 
+    // return to allow other functions to access the input fields
     return {
         getInput: function() {
             return {
@@ -142,13 +145,16 @@ var UIController = (function() {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        // method to clear the input fields
         clearFields: function() {
             var fields, fieldsArr;
 
             fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
 
+            // fields from above is a string, however using prototype.slice.call tricks app to thinking it's an array
             fieldsArr = Array.prototype.slice.call(fields);
 
+            // forEach loop, going through each element inside fieldsArr, and clearing them
             fieldsArr.forEach(function(current, index, array) {
                 current.value = '';
             });
@@ -157,11 +163,19 @@ var UIController = (function() {
 
         },
 
+        // method to display budget info to DOM
         displayBudget: function(obj) {
             document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
             document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
             document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp;
-            document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage;
+            // if else statement, if percentage is greater than 0, will show %, otherwise shows ---
+            if (obj.percentage > 0) {
+                document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%';
+
+            } else {
+                document.querySelector(DOMstrings.percentageLabel).textContent = '---';
+
+            }
         },
         // setting public method to allow other controllers to access DOMstrings
         getDomstrings: function() {
@@ -227,8 +241,14 @@ var controller = (function(budgetCtrl, UICtrl) {
     return {
         // function that runs when app starts
         init: function() {
-            setupEventListeners();
             console.log('app has started');
+            UICtrl.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: -1
+            });
+            setupEventListeners();
         }
     };
 
