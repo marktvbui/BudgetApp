@@ -50,6 +50,10 @@ var budgetController = (function() {
 
             // returning new item
             return newItem;
+        },
+
+        calculateBudget: function() {
+            
         }
     };
 
@@ -144,22 +148,33 @@ var controller = (function(budgetCtrl, UICtrl) {
         });
     };
 
+    var updateBudget = function() {
+
+        // calculate the budget
+
+        // return budget
+
+        // display budget
+    };
+
     var ctrlAddItem = function() {
         var input, newItem;
         // get filled input data
         input = UICtrl.getInput();
 
-        // add item to the budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+        if (input.description !== '' && !isNaN(input.value) && input.value > 0) {
+            // add item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-        // add the item to the UI interface
-        UICtrl.addListItem(newItem, input.type);
+            // add the item to the UI interface
+            UICtrl.addListItem(newItem, input.type);
 
-        // clear the fields
-        UICtrl.clearFields();
+            // clear the fields
+            UICtrl.clearFields();
 
-        // calculate the budget
-        // display budget
+            // calculate and update budget
+            updateBudget();
+        }
 
     };
 
