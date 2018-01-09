@@ -188,6 +188,14 @@ var UIController = (function() {
         return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
     };
 
+    // creating a function that accepts a list, and callback function
+    var nodeListForEach = function(list, callback) {
+        // looping through each expense, and setting value and index
+        for (var i = 0; i < list.length; i++) {
+            callback(list[i], i);
+        }
+    };
+
     // public function allowing access the input fields
     return {
         getInput: function() {
@@ -270,14 +278,6 @@ var UIController = (function() {
             // grabbing all expense elements and saving them into fields variable
             var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-            // creating a function that accepts a list, and callback function
-            var nodeListForEach = function(list, callback) {
-                // looping through each expense, and setting value and index
-                for (var i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                };
-            };
-
             // calling nodelist function and sending percentages to DOM
             nodeListForEach(fields, function(current, index){
 
@@ -290,6 +290,7 @@ var UIController = (function() {
 
         },
 
+        // function to grab current month and year
         displayMonth: function() {
             var now, year, month, months;
             months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',  'December'];
@@ -298,6 +299,22 @@ var UIController = (function() {
             month = now.getMonth();
             document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
 
+        },
+
+        // function to manipulate style when type is changed from inc to exp
+        changedType: function() {
+
+            var fields = document.querySelectorAll(
+                DOMstrings.inputType + ',' +
+                DOMstrings.inputDescription + ',' +
+                DOMstrings.inputValue
+            );
+
+            nodeListForEach(fields, function(cur) {
+                cur.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
         },
 
         // setting public method to allow other controllers to access DOMstrings
@@ -330,6 +347,8 @@ var controller = (function(budgetCtrl, UICtrl) {
 
         // setting up an event delegation, potential many items needing event listener, and dynamic items created
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
     };
 
     var updateBudget = function() {
