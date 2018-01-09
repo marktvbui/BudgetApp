@@ -67,12 +67,15 @@ var budgetController = (function() {
         deleteItem: function(type, id) {
             var ids, index;
 
+            // creating a new array with map method
             ids = data.allItems[type].map(function(current){
                 return current.id;
             });
 
+            // finding location of id inside the array, and setting index to actual ids
             index = ids.indexOf(id);
 
+            // if index is found we splice it out of the array
             if (index !== -1) {
                 data.allItems[type].splice(index, 1);
             }
@@ -129,7 +132,7 @@ var UIController = (function() {
         container: '.container',
     };
 
-    // return to allow other functions to access the input fields
+    // public function allowing access the input fields
     return {
         getInput: function() {
             return {
@@ -160,6 +163,13 @@ var UIController = (function() {
 
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        },
+
+        deleteListItem: function(selectorID) {
+
+            var element = document.getElementById(selectorID);
+            element.parentNode.removeChild(element);
+
         },
 
         // method to clear the input fields
@@ -209,10 +219,11 @@ var controller = (function(budgetCtrl, UICtrl) {
 
     // setting up
     var setupEventListeners = function() {
-        // setting Dom to access getDomstrings method
-        var Dom = UICtrl.getDomstrings();
+        // setting DOM to access getDomstrings method
+        var DOM = UICtrl.getDomstrings();
+
         // onclick event to happen when a user clicks on the add_btn, calling the crtlAddItem function
-        document.querySelector(Dom.inputBtn).addEventListener('click', ctrlAddItem);
+        document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
         // global 'return/enter' button press event listener
         document.addEventListener('keypress', function(event) {
@@ -275,9 +286,10 @@ var controller = (function(budgetCtrl, UICtrl) {
             budgetCtrl.deleteItem(type, ID);
 
             // delete item from UI
+            UICtrl.deleteListItem(itemID);
 
             // update and show new budget
-
+            updateBudget();
         }
 
     };
