@@ -160,6 +160,7 @@ var UIController = (function() {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
+        expensesPercLabel: '.item__percentage',
     };
 
     // public function allowing access the input fields
@@ -234,6 +235,33 @@ var UIController = (function() {
 
             }
         },
+
+        // method to display percentags of expenses to html
+        displayPercentages: function(percentages) {
+
+            // grabbing all expense elements and saving them into fields variable
+            var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
+
+            // creating a function that accepts a list, and callback function
+            var nodeListForEach = function(list, callback) {
+                // looping through each expense, and setting value and index
+                for (var i = 0; i < list.length; i++) {
+                    callback(list[i], i);
+                };
+            };
+
+            // calling nodelist function and sending percentages to DOM
+            nodeListForEach(fields, function(current, index){
+
+                if (percentages[index] > 0) {
+                    current.textContent = percentages[index] + '%';
+                } else {
+                    current.textContent = '---';
+                };
+            });
+
+        },
+
         // setting public method to allow other controllers to access DOMstrings
         getDomstrings: function() {
             return DOMstrings;
@@ -287,7 +315,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         var percentages = budgetCtrl.getPercentages();
 
         // update DOM
-
+        UICtrl.displayPercentages(percentages);
 
     };
 
